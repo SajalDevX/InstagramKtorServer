@@ -79,7 +79,7 @@ fun Routing.postRouting(){
                         status = HttpStatusCode.InternalServerError,
                         message = PostResponse(
                             success = false,
-                            message = "An unexpected error has occured, try again!"
+                            message = "An unexpected error has occurred, try again!"
                         )
                     )
                 }
@@ -154,9 +154,9 @@ fun Routing.postRouting(){
                         status = result.code,
                         message = result.data
                     )
-                } catch (badRequestError: BadRequestException) {
+                }catch (badRequestError: BadRequestException){
                     return@get
-                } catch (anyError: Throwable) {
+                }catch (anyError: Throwable){
                     call.respond(
                         status = HttpStatusCode.InternalServerError,
                         message = PostsResponse(

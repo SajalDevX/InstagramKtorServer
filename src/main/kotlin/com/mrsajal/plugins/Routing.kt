@@ -1,13 +1,11 @@
 package com.mrsajal.plugins
 
-import com.mrsajal.route.authRouting
-import com.mrsajal.route.followsRouting
-import com.mrsajal.route.postRouting
-import com.mrsajal.route.profileRouting
+import com.mrsajal.route.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
+
+
 
 fun Application.configureRouting() {
     routing {
@@ -15,8 +13,8 @@ fun Application.configureRouting() {
         followsRouting()
         postRouting()
         profileRouting()
-        static {
-            resources("static")
-        }
+        postCommentsRouting()
+        staticResources("/static", "static")
     }
 }
+

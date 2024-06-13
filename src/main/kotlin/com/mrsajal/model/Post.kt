@@ -33,7 +33,7 @@ data class PostResponse(
 @Serializable
 data class PostsResponse(
     val success: Boolean,
-    val posts: List<Post>? = listOf(),
+    val posts: List<Post> = listOf(),
     val message: String? = null
 )
 
