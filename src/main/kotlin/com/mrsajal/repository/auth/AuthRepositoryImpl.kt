@@ -1,4 +1,4 @@
-package com.mrsajal.repository
+package com.mrsajal.repository.auth
 
 import com.mrsajal.dao.user.UserDao
 import com.mrsajal.model.AuthResponse
@@ -6,13 +6,14 @@ import com.mrsajal.model.AuthResponseData
 import com.mrsajal.model.SignInParams
 import com.mrsajal.model.SignUpParams
 import com.mrsajal.plugins.generateToken
+import com.mrsajal.repository.auth.AuthRepository
 import com.mrsajal.security.hashPassword
 import com.mrsajal.util.Response
 import io.ktor.http.*
 
-class UserRepositoryImpl(
+class AuthRepositoryImpl(
     private val userDao: UserDao
-) : UserRepository {
+) : AuthRepository {
     override suspend fun signUp(params: SignUpParams): Response<AuthResponse> {
         return if (userAlreadyExists(params.email)) {
             Response.Error(
@@ -61,6 +62,8 @@ class UserRepositoryImpl(
                             id = user.id,
                             name = user.name,
                             bio = user.bio,
+                            followingCount = user.followingCount,
+                            followersCount = user.followerCount,
                             token = generateToken(params.email)
                         )
                     )

@@ -3,7 +3,7 @@ package com.mrsajal.route
 import com.mrsajal.model.AuthResponse
 import com.mrsajal.model.SignInParams
 import com.mrsajal.model.SignUpParams
-import com.mrsajal.repository.UserRepository
+import com.mrsajal.repository.auth.AuthRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -12,7 +12,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Routing.authRouting() {
-    val repository by inject<UserRepository>()
+    val repository by inject<AuthRepository>()
 
     route(path = "/signup") {
         post {

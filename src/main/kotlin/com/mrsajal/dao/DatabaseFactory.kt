@@ -1,5 +1,9 @@
 package com.mrsajal.dao
 
+import com.mrsajal.dao.follows.FollowsTable
+import com.mrsajal.dao.post.PostTable
+import com.mrsajal.dao.post_comment.PostCommentsTable
+import com.mrsajal.dao.post_likes.PostLikesTable
 import com.mrsajal.dao.user.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -15,7 +19,7 @@ object DatabaseFactory {
         Database.connect(createHikariDataSource())
         transaction {
             SchemaUtils.create(
-                UserTable
+                UserTable, FollowsTable,PostTable,PostLikesTable,PostCommentsTable
             )
         }
     }
