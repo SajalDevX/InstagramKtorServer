@@ -18,10 +18,11 @@ import com.mrsajal.repository.post.PostRepository
 import com.mrsajal.repository.post.PostRepositoryImpl
 import com.mrsajal.repository.post_comment.PostCommentRepository
 import com.mrsajal.repository.post_comment.PostCommentRepositoryImpl
+import com.mrsajal.repository.post_likes.PostLikesRepository
+import com.mrsajal.repository.post_likes.PostLikesRepositoryImpl
 import com.mrsajal.repository.profile.ProfileRepository
 import com.mrsajal.repository.profile.ProfileRepositoryImpl
 import org.koin.dsl.module
-import kotlin.math.sin
 
 val appModule = module {
     single<AuthRepository> { AuthRepositoryImpl(get()) }
@@ -34,4 +35,6 @@ val appModule = module {
     single<ProfileRepository> { ProfileRepositoryImpl(get(), get()) }
     single<PostCommentDao> { PostCommentDaoImpl() }
     single<PostCommentRepository> { PostCommentRepositoryImpl(get(), get()) }
+    single<PostLikesDao> { PostLikesDaoImpl() }
+    single<PostLikesRepository> { PostLikesRepositoryImpl(get(), get()) }
 }
