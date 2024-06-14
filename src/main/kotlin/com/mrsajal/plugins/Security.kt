@@ -2,12 +2,15 @@ package com.mrsajal.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.mrsajal.dao.user.UserDao
 import com.mrsajal.model.AuthResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
+import org.koin.ktor.ext.inject
+import java.util.*
 
 val jwtAudience = System.getenv("jwt.audience")
 val jwtIssuer = System.getenv("jwt.issuer")
@@ -17,7 +20,7 @@ private const val CLAIM = "email"
 
 
 fun Application.configureSecurity() {
-
+    val userDao by inject<UserDao>()
     authentication {
         jwt {
             realm = jwtRealm
@@ -30,7 +33,13 @@ fun Application.configureSecurity() {
             )
             validate { credential ->
                 if (credential.payload.getClaim(CLAIM).asString() != null) {
-                    JWTPrincipal(payload = credential.payload)
+                    val userExists = userDao.findByEmail(email = credential.payload.getClaim(CLAIM).asString()) != null
+                    val isValidAudience = credential.payload.audience.contains(jwtAudience)
+                    if (userExists && isValidAudience) {
+                        JWTPrincipal(payload = credential.payload)
+                    } else {
+                        null
+                    }
                 } else {
                     null
                 }
@@ -47,19 +56,20 @@ fun Application.configureSecurity() {
     }
 }
 
+
 fun generateToken(email: String): String {
-//    val millisInAnHour = 3_600_000
-//    val millisInADay = 24 * millisInAnHour
-//    val longExpireAfter60Days = System.currentTimeMillis() + 60 * millisInADay
+
+    val millisInAnHour = 3_600_000
+    val millisInADay = 24 * millisInAnHour
+    val longExpireAfter20Days = Date(System.currentTimeMillis() + 20 * millisInADay)
 
     return JWT.create()
         .withAudience(jwtAudience)
         .withIssuer(jwtIssuer)
+        .withExpiresAt(longExpireAfter20Days)
         .withClaim(CLAIM, email)
         .sign(Algorithm.HMAC256(jwtSecret))
-
 }
-
 
 
 
