@@ -5,12 +5,8 @@ import com.mrsajal.model.SignUpParams
 import com.mrsajal.dao.user.UserTable.id
 import com.mrsajal.security.hashPassword
 import com.mrsajal.util.IdGenerator
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
 
 class UserDaoImpl : UserDao {
     override suspend fun insert(params: SignUpParams): UserRow? {
@@ -55,6 +51,21 @@ class UserDaoImpl : UserDao {
                 .singleOrNull()
         }
     }
+    override suspend fun getPopularUsers(limit: Int): List<UserRow> {
+        return dbQuery {
+            UserTable.selectAll()
+                .orderBy(column = UserTable.followerCount, order = SortOrder.DESC)
+                .limit(n = limit)
+                .map { rowToUser(it) }
+        }
+    }
+    override suspend fun getUsers(ids: List<Long>): List<UserRow> {
+        return dbQuery {
+            UserTable.select(where = { UserTable.id inList ids})
+                .map { rowToUser(it) }
+        }
+    }
+
 
     override suspend fun updateUser(userId: Long, name: String, bio: String, imageUrl: String?): Boolean {
         return dbQuery {
