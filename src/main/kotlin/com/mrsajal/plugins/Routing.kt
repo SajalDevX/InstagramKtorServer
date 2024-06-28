@@ -13,7 +13,8 @@ fun Application.configureRouting() {
         profileRouting()
         postCommentsRouting()
         postLikesRouting()
-        staticResources("/static", "static")
-    }
+        static {
+            resources("static")
+        }    }
 }
 

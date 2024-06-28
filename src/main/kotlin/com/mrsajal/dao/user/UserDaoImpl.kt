@@ -14,7 +14,7 @@ class UserDaoImpl : UserDao {
             val insertStatement = UserTable.insert {
                 it[id] = IdGenerator.generateId()
                 it[name] = params.name
-                it[email] = params.email
+                it[email] = params.email.lowercase()
                 it[password] = hashPassword(params.password)
             }
             insertStatement.resultedValues?.singleOrNull()?.let {
@@ -25,7 +25,8 @@ class UserDaoImpl : UserDao {
 
     override suspend fun findByEmail(email: String): UserRow? {
         return dbQuery {
-            UserTable.select { UserTable.email eq email }
+            val text = email.lowercase()
+            UserTable.select { UserTable.email.lowerCase() eq text }
                 .map { rowToUser(it) }
                 .singleOrNull()
         }
@@ -51,6 +52,7 @@ class UserDaoImpl : UserDao {
                 .singleOrNull()
         }
     }
+
     override suspend fun getPopularUsers(limit: Int): List<UserRow> {
         return dbQuery {
             UserTable.selectAll()
@@ -59,9 +61,10 @@ class UserDaoImpl : UserDao {
                 .map { rowToUser(it) }
         }
     }
+
     override suspend fun getUsers(ids: List<Long>): List<UserRow> {
         return dbQuery {
-            UserTable.select(where = { UserTable.id inList ids})
+            UserTable.select(where = { UserTable.id inList ids })
                 .map { rowToUser(it) }
         }
     }
@@ -69,7 +72,7 @@ class UserDaoImpl : UserDao {
 
     override suspend fun updateUser(userId: Long, name: String, bio: String, imageUrl: String?): Boolean {
         return dbQuery {
-            UserTable.update(where = {UserTable.id eq userId}) {
+            UserTable.update(where = { UserTable.id eq userId }) {
                 it[UserTable.name] = name
                 it[UserTable.bio] = bio
                 it[UserTable.imageUrl] = imageUrl

@@ -37,20 +37,3 @@ data class PostsResponse(
     val message: String? = null
 )
 
-@Serializable
-data class PostLikeResponse(
-    val success: Boolean,
-    val message: String? = null
-)
-
-@Serializable
-data class PostCommentResponse(
-    val success: Boolean,
-    val message: String? = null
-)
-
-@Serializable
-data class PostDeleteResponse(
-    val success: Boolean,
-    val message: String? = null
-)
