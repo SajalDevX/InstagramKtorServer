@@ -15,6 +15,7 @@ fun Application.configureRouting() {
         postLikesRouting()
         static {
             resources("static")
-        }    }
+        }
+    }
 }
 

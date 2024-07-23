@@ -61,5 +61,4 @@ class FollowsDaoImpl : FollowsDao {
                 .map { it[FollowsTable.followingId] }
         }
     }
-
 }

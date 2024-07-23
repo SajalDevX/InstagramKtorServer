@@ -36,7 +36,6 @@ class FollowsRepositoryImpl(
                     data = FollowAndUnfollowResponse(
                         success = false,
                         message = "Error in  FollowsDaoImpl Else"
-//                        "Oops Something went wrong, Try again later"
                     )
                 )
             }
